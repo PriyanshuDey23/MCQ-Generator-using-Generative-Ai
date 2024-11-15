@@ -1,0 +1,6 @@
+MCQ,Choices,Correct
+What is the basic working principle of a transformer?,a: Electromagnetic induction | b: Mutual induction | c: Self-induction | d: Faraday's law of electrolysis,b
+Why are transformers rated in kVA and not kW?,"a: Because their losses depend on voltage and current, not the phase angle. | b: Because they only operate on alternating current. | c: Because they are static devices. | d: Because they can step up or step down voltage.",a
+What are the two main types of transformer construction?,a: Air-core and Iron-core | b: Core type and Shell type | c: Step-up and Step-down | d: Single-phase and Three-phase,b
+What is the purpose of laminating the steel core in a transformer?,a: To increase the magnetic flux | b: To reduce eddy current losses | c: To improve insulation | d: To reduce copper losses,b
+Which test helps determine the core losses of a transformer?,a: Short circuit test | b: Open circuit test | c: Load test | d: Impedance test,b

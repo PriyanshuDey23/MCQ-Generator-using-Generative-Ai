@@ -4,4 +4,6 @@ google-generativeai
 python-dotenv
 langchain
 langchain_community
-PyPDF2
+pypdf
+pymupdf
+-e .
