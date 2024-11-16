@@ -5,6 +5,15 @@ import PyPDF2
 import json
 import traceback
 
+from langchain.document_loaders import PyPDFLoader, DirectoryLoader
+def load_pdf_file(data):
+    loader= DirectoryLoader(data,
+                            glob="*.pdf",  # Load Only Pdf documents
+                            loader_cls=PyPDFLoader)
+
+    documents=loader.load()
+
+    return documents
 
 def read_file(file):
     if file.name.endswith(".pdf"):
