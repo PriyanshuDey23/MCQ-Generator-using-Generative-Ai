@@ -1,19 +1,29 @@
  # HelperCode
 
+from langchain.document_loaders import PyPDFLoader, DirectoryLoader
 import os
 import PyPDF2
 import json
 import traceback
+import io
 
-from langchain.document_loaders import PyPDFLoader, DirectoryLoader
-def load_pdf_file(data):
-    loader= DirectoryLoader(data,
-                            glob="*.pdf",  # Load Only Pdf documents
-                            loader_cls=PyPDFLoader)
+import tempfile
 
-    documents=loader.load()
+def load_pdf_file(uploaded_file):
+    # Create a temporary file to store the uploaded PDF
+    with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
+        tmp_file.write(uploaded_file.getbuffer())
+        tmp_file_path = tmp_file.name  # Get the temporary file path
+
+    # Now use the file path with PyPDFLoader
+    loader = PyPDFLoader(tmp_file_path)
+    documents = loader.load()
+
+    # Optionally, clean up the temporary file after processing
+    os.remove(tmp_file_path)  # This will delete the temp file
 
     return documents
+
 
 def read_file(file):
     if file.name.endswith(".pdf"):

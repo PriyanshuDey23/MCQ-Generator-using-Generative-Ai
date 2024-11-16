@@ -38,7 +38,7 @@ quiz_generation_prompt = PromptTemplate(
 
 
 # Quiz chain
-quiz_chain=LLMChain(llm=llm,prompts=quiz_generation_prompt,output_key="quiz",verbose=True)
+quiz_chain=LLMChain(llm=llm,prompt=quiz_generation_prompt,output_key="quiz",verbose=True)
 
 
 # Check if the quiz is correct or not
