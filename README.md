@@ -4,7 +4,7 @@
 This project is a web-based application built using **Streamlit** to generate multiple-choice questions (MCQs) from text-based content like PDFs or TXT files. The application utilizes **Generative AI** for intelligent MCQ creation, making it easy to generate customized quizzes on various subjects.
 
 ## Features
-- Upload PDF or text files to extract content
+- Upload PDF files to extract content
 - Generate MCQs based on the extracted text
 - Customize MCQ generation with options like the number of questions, subject, and tone (complexity level)
 - Real-time display of the generated quiz

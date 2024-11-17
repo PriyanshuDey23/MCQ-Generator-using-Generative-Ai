@@ -23,7 +23,7 @@ st.title("MCQ Generator")
 with st.form('User_Input'):
 
     # File Upload
-    uploaded_file=st.file_uploader("Upload a PDF or txt file")
+    uploaded_file=st.file_uploader("Upload a PDF  file")
 
     # Input Fields
     mcq_count=st.number_input("Number of MCQs",min_value=3,max_value=50)
