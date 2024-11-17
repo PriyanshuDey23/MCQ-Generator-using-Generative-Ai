@@ -23,7 +23,7 @@ st.title("MCQ Generator")
 with st.form('User_Input'):
 
     # File Upload
-    uploaded_file=st.file_uploader("Upload a PDF  file")
+    uploaded_file=st.file_uploader("Upload a PDF or text file")
 
     # Input Fields
     mcq_count=st.number_input("Number of MCQs",min_value=3,max_value=50)
@@ -42,7 +42,7 @@ with st.form('User_Input'):
     if button and uploaded_file is not None and mcq_count and subject and tone:
         with st.spinner("Loading..."):
             try:
-                text=load_pdf_file(uploaded_file)
+                text=read_file(uploaded_file)
                 # Count Token and the cost of API Call
                 with get_openai_callback() as cb:
                     response=generate_evaluate_chain(
