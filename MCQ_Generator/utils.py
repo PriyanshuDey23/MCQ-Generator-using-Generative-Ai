@@ -1,6 +1,5 @@
  # HelperCode
 
-
 import os
 import PyPDF2
 import json
@@ -8,27 +7,26 @@ import traceback
 import io
 
 
-
-
 def read_file(file):
     if file.name.endswith(".pdf"):
         try:
-            pdf_reader=PyPDF2.PdfFileReader(file)
-            text=""
+            # Use PdfReader instead of PdfFileReader
+            pdf_reader = PyPDF2.PdfReader(file)
+            text = ""
+            # Iterate over all pages using pdf_reader.pages
             for page in pdf_reader.pages:
-                text+=page.extract_text()
+                text += page.extract_text()
             return text
-            
+
         except Exception as e:
-            raise Exception("error reading the PDF file")
+            raise Exception("Error reading the PDF file") from e
         
     elif file.name.endswith(".txt"):
         return file.read().decode("utf-8")
     
     else:
-        raise Exception(
-            "unsupported file format only pdf and text file suppoted"
-            )
+        raise Exception("Unsupported file format, only PDF and text files supported")
+
 
 def get_table_data(quiz_str):
     try:

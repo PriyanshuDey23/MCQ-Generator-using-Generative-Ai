@@ -2,13 +2,11 @@ import os
 import json
 import pandas as pd
 import traceback
-from dotenv import load_dotenv
 import streamlit as st
 from langchain_community.callbacks import get_openai_callback
-from MCQ_Generator.utils import *
-from MCQ_Generator.logger import logging
+from MCQ_Generator.utils import read_file, get_table_data
 from MCQ_Generator.MCQGenerator import generate_evaluate_chain
-from langchain.document_loaders import PyPDFLoader, DirectoryLoader
+
 
 
 
@@ -16,81 +14,94 @@ from langchain.document_loaders import PyPDFLoader, DirectoryLoader
 with open('Response.json','r') as file:
     RESPONSE_JSON=json.load(file)
 
-# Creating title for the app
-st.title("MCQ Generator")
 
-# Create a form 
+
+
+# Title & Description
+st.set_page_config(page_title="MCQ Generator", layout="wide")
+st.title("📝 MCQ Generator")
+st.markdown("Generate multiple-choice questions from uploaded documents effortlessly.")
+
+# Create a form with a modern layout
 with st.form('User_Input'):
+    
+    # Create columns for better UI alignment
+    col1, col2 = st.columns(2)
 
     # File Upload
-    uploaded_file=st.file_uploader("Upload a PDF or text file")
+    uploaded_file = st.file_uploader("📂 Upload a PDF or text file", type=["pdf", "txt"], help="Supported formats: PDF, TXT")
 
-    # Input Fields
-    mcq_count=st.number_input("Number of MCQs",min_value=3,max_value=50)
+    # Input Fields in columns
+    with col1:
+        mcq_count = st.number_input("🔢 Number of MCQs", min_value=3, max_value=50, help="Select the number of MCQs to generate.")
+        subject = st.text_input("📚 Subject", max_chars=50, placeholder="e.g., Mathematics, Science")
+    
+    with col2:
+        tone = st.selectbox("🎯 Complexity Level", ["Simple", "Intermediate", "Advanced"], help="Choose the difficulty level.")
 
-    # Subjects
-    subject=st.text_input("Insert Subjects",max_chars=50)
+    # Generate Button
+    button = st.form_submit_button("🚀 Generate MCQs")
 
-    # Quiz Tone
-    tone=st.text_input("Complexility level of Questions", max_chars=20,placeholder="Simple")
+# Check if button is clicked and required inputs are provided
+if button:
+    if uploaded_file is None:
+        st.warning("⚠️ Please upload a file to proceed.")
+    elif not subject:
+        st.warning("⚠️ Please enter a subject.")
+    else:
+        with st.spinner("⏳ Generating MCQs... Please wait."):
 
-    # Add Button
-    button=st.form_submit_button("Generate MCQs")
-
-    # Check if the button is clicked and all filds have input
-
-    if button and uploaded_file is not None and mcq_count and subject and tone:
-        with st.spinner("Loading..."):
             try:
-                text=read_file(uploaded_file)
-                # Count Token and the cost of API Call
+                # Read uploaded file
+                text = read_file(uploaded_file) 
+
+                # Call OpenAI API
                 with get_openai_callback() as cb:
-                    response=generate_evaluate_chain(
+                    response = generate_evaluate_chain(
                         {
                             "text": text,
                             "number": mcq_count,
-                            "subject":subject,
+                            "subject": subject,
                             "tone": tone,
                             "response_json": json.dumps(RESPONSE_JSON)
                         }
                     )
+
             except Exception as e:
-                traceback.print_exception(type(e),e,e.__traceback__)
-                st.error("Error")
-
+                st.error("❌ An error occurred while generating MCQs.")
+                st.error(f"Error Details: {str(e)}")
+                traceback.print_exc()
             else:
-                print(f"Total Tokens:{cb.total_tokens}")
-                print(f"Prompt Tokens:{cb.prompt_tokens}")
-                print(f"Completion Tokens:{cb.completion_tokens}")
-                print(f"Total Cost:{cb.total_cost}")
+                # Debugging logs
+                print(f"Total Tokens: {cb.total_tokens}")
+                print(f"Total Cost: {cb.total_cost}")
 
-                if isinstance(response,dict):  # isinstance:- Returns true
+                if isinstance(response, dict):
+                    quiz = response.get("quiz", "").strip().replace('```json', '').replace('```', '')
 
-                    # Extract Quiz from response
-                    quiz=response.get("quiz",None)
-
-                    # Remove the leading and trailing Markdown code block formatting (```json and ```)
-                    quiz = quiz.strip().replace('```json', '').replace('```', '')
-
-                    if quiz is not None:
-                        table_data=get_table_data(quiz)
-
+                    if quiz:
+                        table_data = get_table_data(quiz)
                         if table_data is not None:
-                            df=pd.DataFrame(table_data)
-                            df.index=df.index+1 # Adjust index starting from 1
-                            st.table(df) # Display the table in Streamlit
-
-                            # Save the DataFrame to CSV file
-                            csv_path = "data/quiz.csv"
-                            df.to_csv(csv_path, index=False)  # Save to CSV without index
-                            st.success(f"Quiz saved as {csv_path}")
-
+                            df = pd.DataFrame(table_data)
+                            df.index = df.index + 1  # Start index from 1
                             
-                            # Display the review in a text box as well
-                            st.text_area(label="Review",value=response["review"])
-                        else:
-                            st.error("Error in table data")
+                            # Display the MCQs as a table
+                            st.subheader("📊 Generated MCQs")
+                            st.dataframe(df, use_container_width=True)
 
+                            # Save as CSV
+                            csv_path = "data/quiz.csv"
+                            df.to_csv(csv_path, index=False)
+                            st.success(f"✅ Quiz saved as `{csv_path}`")
+
+                            # Expandable review section
+                            with st.expander("📄 Review MCQs"):
+                                st.text_area(label="Review", value=response.get("review", "No review available."), height=200)
+
+                        else:
+                            st.error("⚠️ Error processing table data.")
+                    else:
+                        st.warning("⚠️ No quiz data found.")
                 else:
                     st.write(response)
 

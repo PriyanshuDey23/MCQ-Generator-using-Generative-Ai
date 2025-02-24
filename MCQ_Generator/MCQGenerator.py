@@ -1,9 +1,6 @@
 import os
-import json
-import traceback
-import pandas as pd
 from dotenv import load_dotenv
-from MCQ_Generator.logger import logging
+
 
 # Importing necessary packages from langchain
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -18,7 +15,7 @@ load_dotenv()
 GOOGLE_API_KEY=os.getenv("GOOGLE_API_KEY")
 
 # Define the LLM
-llm = ChatGoogleGenerativeAI(model="gemini-1.5-pro-002",temperature=0.2)
+llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash",temperature=0.2)
 
 TEMPLATE="""
 Text:{text}

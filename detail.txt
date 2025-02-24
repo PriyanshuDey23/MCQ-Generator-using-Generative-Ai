@@ -1,3 +1,0 @@
-- I will give the input prompt to the llm and as ouput as prompt
-- I will design my input and output prompt
-- what ever subject i will give it to my llm it will generate the mcq related to the topic/pdf

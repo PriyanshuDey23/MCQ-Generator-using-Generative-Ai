@@ -1,77 +1,74 @@
+# MCQ Generator
 
-# MCQ Generator using Generative AI
+![](output.png)
+![](2.png)
+![](3.png)
 
-This project is a web-based application built using **Streamlit** to generate multiple-choice questions (MCQs) from text-based content like PDFs or TXT files. The application utilizes **Generative AI** for intelligent MCQ creation, making it easy to generate customized quizzes on various subjects.
+## Overview
+MCQ Generator is a Streamlit-based web application that generates multiple-choice questions (MCQs) from uploaded text or PDF documents. The application utilizes Google's Gemini API for language generation and ensures that the generated questions align with the provided content.
 
 ## Features
-- Upload PDF or Text files to extract content
-- Generate MCQs based on the extracted text
-- Customize MCQ generation with options like the number of questions, subject, and tone (complexity level)
-- Real-time display of the generated quiz
-- Option to download the quiz as a CSV file
+- Upload PDF or text files as input.
+- Generate MCQs based on the uploaded content.
+- Customize the number of MCQs and complexity level.
+- Review generated MCQs for quality assessment.
+- Save the MCQs as a CSV file for further use.
 
+## Technologies Used
+- **Python**: Core programming language.
+- **Streamlit**: Web framework for UI.
+- **LangChain**: Integration with LLMs (Google Gemini API).
+- **Pandas**: Handling tabular data.
+- **OpenAI Callback**: Token tracking and debugging.
+- **Dotenv**: Environment variable management.
 
+## Installation
+### Prerequisites
+Ensure you have Python 3.8+ installed on your system.
 
-```bash
-pip install -r requirements.txt
-```
-
-Alternatively, you can install the package directly using:
-
-```bash
-pip install -e .
-```
-
-## Installation Steps
-
+### Steps to Install
 1. Clone the repository:
-    ```bash
-    git clone https://github.com/PriyanshuDey23/MCQ-Generator-using-Generative-Ai.git
-    cd mcq-generator
-    ```
-
-2. **Create a Virtual Environment**:
-    In the project directory, create a virtual environment. You can name it something like `env`:
-
-    ```bash
-    virtualenv env
-    ```
-
-3. Install the dependencies:
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-4. Set up your environment variables:
-    - Create a `.env` file in the root of the project directory.
-    - Add necessary API keys and configurations (e.g., OpenAI API keys, Google Cloud API credentials).
-
-    Example `.env` file:
-    ```env
-    GOOGLE_API_KEY=your-google-api-key
-    ```
-
-5. Run the application:
-    ```bash
-    streamlit run app.py
-    ```
-
-This will start the app locally, and you can access it in your browser at `http://localhost:8080`.
+   ```sh
+   git clone https://github.com/PriyanshuDey23/MCQ-Generator-using-Generative-Ai.git
+   cd mcq-generator
+   ```
+2. Install required dependencies:
+   ```sh
+   pip install -r requirements.txt
+   ```
+3. Set up environment variables by creating a `.env` file:
+   ```sh
+   GOOGLE_API_KEY=your_google_api_key
+   ```
+4. Place a `Response.json` file in the root directory, which contains the expected response format.
 
 ## Usage
+1. Run the application:
+   ```sh
+   streamlit run app.py
+   ```
+2. Upload a PDF or text file.
+3. Select the number of MCQs and difficulty level.
+4. Click **Generate MCQs** to obtain the questions.
+5. Review and download the generated quiz.
 
-1. Upload a PDF or TXT file using the file uploader.
-2. Input the desired number of MCQs, subject, and tone (complexity level).
-3. Click "Generate MCQs" to generate the quiz based on the uploaded content.
-4. The generated MCQs will be displayed in a table, and you can also see a review.
-5. Optionally, download the quiz as a CSV file.
+## File Structure
+```
+mcq-generator/
+│── MCQ_Generator/
+│   ├── __init__.py
+│   ├── mcq_generator.py            # MCQ generation logic using LangChain
+│   ├── utils.py          # File reading and data processing utilities
+│── app.py                # Streamlit application
+│── Response.json         # JSON format for expected MCQ response
+│── requirements.txt      # List of dependencies
+│── .env                  # Environment variables (API keys)
+```
+
+
 
 ## License
+This project is licensed under the MIT License.
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Acknowledgments
 
-- This project uses **Generative AI** technologies such as **OpenAI** and **Google Cloud** for text-based content generation.
-- **Streamlit** is used to build the interactive frontend of the application.
-- **LangChain** and **LangChain Community** are utilized for chain processing and integrating AI models.
